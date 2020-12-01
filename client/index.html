@@ -5,14 +5,65 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>Buisness Card Parser</title>
 	<link rel="stylesheet" href="main.css">
+	<link rel="stylesheet" href="loadanim.css">
+	<script src="https://kit.fontawesome.com/c3db8f4cfe.js" crossorigin="anonymous"></script>
 </head>
 <body>
-	<header>
-		<h1>Business Card Parser</h1>
-	</header>
-	<textarea id="txtText"></textarea>
-	<input type="file" id="fileImage">
-	<button id="btnParse">Parse Card</button>
+	<div id="wrapper">
+		<section id="error-box">
+			An error occoured!
+			<p id="error"></p>
+		</section>
+		<main>
+			<header>
+				<h1>Business Card<i class="far fa-address-card"></i>Parser</h1>
+			</header>
+			<p id="description">
+				This app will take the image or the text from a business card and give you the name, phone number, and email address on the card.
+			</p>
+			<section id="input">
+				<input type="radio" name="mode" id="rdb-image" checked>
+				<label for="rdb-image">Image</label>
+				<input type="radio" name="mode" id="rdb-text">
+				<label for="rdb-text">Text</label>
+				<div id="tab-container">
+					<div class="tab" id="tab-image">
+						<input type="file" id="file-image" accept="image/*">
+						<label for="file-image" id="lbl-image">
+							<i class="fas fa-images fa-3x"></i>
+							<strong>Upload Image</strong>
+						</label>
+					</div>
+					<div class="tab" id="tab-text">
+						<textarea id="txt-text"></textarea>
+					</div>
+				</div>
+				<button id="btn-parse">Parse Card</button>
+			</section>
+			<div id="loader"></div>
+			<section id="card">
+				<i id="avatar" class="fas fa-user-tie fa-3x"></i>
+				<section class="info" contenteditable="true"=>
+					<p>
+						<i class="fas fa-signature"></i>
+						<span class="info-text" id="lbl-name"></span>
+					</p>
+					<p>
+						<i class="fas fa-phone"></i>
+						<a id="lbl-phone" class="info-text"></a>
+					</p>
+					<p>
+						<i class="fas fa-envelope"></i>
+						<a id="lbl-email" class="info-text"></a>
+					</p>
+				</section>
+			</section>
+			<footer>
+				Made by <a href="https://sethpainter.com">Seth Painter</a>
+				Source on <a href="https://github.com/TheFoxarmy/BusinessCardParser"><i class="fab fa-github"></i>Github</a>
+			</footer>
+		</main>
+	</div>
 	<script src="./main.js"></script>
 </body>
 </html>
