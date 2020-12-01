@@ -1,0 +1,15 @@
+{
+	"name": "businesscard",
+	"version": "1.0.0",
+	"description": "Tool that scrapes data from the text of a business card",
+	"type": "module",
+	"scripts": {
+		"start": "node main.js",
+		"test": "node --experimental-vm-modules node_modules/jest/bin/jest.js"
+	},
+	"author": "Seth Painter",
+	"license": "ISC",
+	"devDependencies": {
+		"jest": "^26.6.3"
+	}
+}
