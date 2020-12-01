@@ -5,11 +5,19 @@
 	"type": "module",
 	"scripts": {
 		"start": "node main.js",
-		"test": "node --experimental-vm-modules node_modules/jest/bin/jest.js"
+		"test": "node --experimental-vm-modules node_modules/jest/bin/jest.js",
+		"server": "nodemon main.js"
 	},
 	"author": "Seth Painter",
 	"license": "ISC",
 	"devDependencies": {
-		"jest": "^26.6.3"
+		"jest": "^26.6.3",
+		"nodemon": "^2.0.6"
+	},
+	"dependencies": {
+		"dotenv": "^8.2.0",
+		"express": "^4.17.1",
+		"multer": "^1.4.2",
+		"node-tesseract-ocr": "^2.0.0"
 	}
 }

@@ -1,7 +1,9 @@
 # Business Card Parser
 
-This program takes the text from an OCR scanned business card and outputs some data about the user.
-It find the name, email address, and phone number of the user.
+This was initially created for a code test in a job interview, but I've extended the functionality into its own project.
+
+This fullstack app takes the text from an OCR scanned business card and outputs user that can be saved as a contact.
+It find the name, email address, and phone number on the card.
 
 > This was written with Node v14 and uses some of the newer features of the runtime and may not work on older versions.
 

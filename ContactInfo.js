@@ -35,4 +35,11 @@ Phone: ${this.getPhoneNumber()}
 Email: ${this.getEmailAddress()}`
 		);
 	}
+	async toJSON() {
+		return Promise.resolve({
+			name: await this.getName(),
+			email: this.getEmailAddress(),
+			phone: this.getPhoneNumber()
+		});
+	}
 }
