@@ -1,4 +1,5 @@
 import express from 'express'
+import cors from 'cors'
 import { recognize } from "node-tesseract-ocr"
 import multer from 'multer';
 
@@ -9,10 +10,12 @@ export default class Server {
 		
 		this.server = express();
 		this.server.use(express.json())
-		
-		this.server.get('/', (req, res) => res.send('Welcome to buisness card parser! Try the routes /text & /image'));
+		this.server.use(cors())
 
-		this.server.get('/text', async (req, res) => {
+		// this.server.get('/', (req, res) => res.send('Welcome to buisness card parser! Try the routes /text & /image'));
+		this.server.use(express.static('client'));
+
+		this.server.post('/text', async (req, res) => {
 			if(req.body.text)
 				try {
 					const data = cardParser.getContactInfo(req.body.text);
@@ -24,13 +27,12 @@ export default class Server {
 				res.status(400).send('Please provide your text in the text property of the body of the response.')
 		});
 
-		this.server.get('/image', multer({dest: 'cards'}).single('image'), async (req, res) => {
+		this.server.post('/image', multer({dest: 'cards'}).single('image'), async (req, res) => {
 			try {
-				console.log(req.file)
 				const resultOCR = await recognize(req.file.path, {
 					lang: "eng",
-					oem: 3, // Use NNet processing + Legacy
-					psm: 12, // Use sparce text / OCD
+					oem: 1, // Use NNet LTSM mode
+					psm: 1, // Use sparce text / OCD
 				});
 				const data = cardParser.getContactInfo(resultOCR);
 				res.send(await data.toJSON());
