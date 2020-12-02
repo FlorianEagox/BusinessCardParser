@@ -1,6 +1,6 @@
 import express from 'express'
 import cors from 'cors'
-import { recognize } from "node-tesseract-ocr"
+import { ImageAnnotatorClient } from '@google-cloud/vision'
 import multer from 'multer';
 import morgan from 'morgan';
 
@@ -8,7 +8,8 @@ export default class Server {
 	constructor(cardParser) {
 		this.cardParser = cardParser;
 		this.port = 5005;
-		
+		this.client = new ImageAnnotatorClient();
+
 		this.server = express();
 		this.server.use(cors());
 		this.server.use(express.json());
@@ -31,11 +32,7 @@ export default class Server {
 
 		this.server.post('/image', multer({dest: 'cards'}).single('image'), async (req, res) => {
 			try {
-				const resultOCR = await recognize(req.file.path, {
-					lang: "eng",
-					oem: 1, // Use NNet LTSM mode
-					psm: 1, // Use sparce text / OCD
-				});
+				const resultOCR = await this.ocrImage(req.file.path);
 				console.log(resultOCR);
 				const data = cardParser.getContactInfo(resultOCR);
 				res.send(await data.toJSON());
@@ -48,5 +45,11 @@ export default class Server {
 		this.server.listen(this.port, () => {
 			console.log(`Listening on port ${this.port}`);
 		});
+	}
+	async ocrImage(fileName) {
+		const [result] = await this.client.textDetection(fileName);
+		const detections = result.textAnnotations;
+		
+		return detections[0]?.description || null;
 	}
 }

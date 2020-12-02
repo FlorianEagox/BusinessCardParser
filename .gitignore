@@ -1,2 +1,3 @@
 cards/
 node_modules/
+google_cloud_creds.json

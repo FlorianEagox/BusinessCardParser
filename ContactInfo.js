@@ -6,12 +6,14 @@ export default class ContactInfo {
 	// Returns the full name of the business card
 	async getName() { 
 		return new Promise((resolve, reject) => { // we have to search through a lot of data, this can take awhile, so we should use a promise.
-			// A regex query that looks for two words that both start with captial letters seperated by space or \n. Allows many unique name characters.
-			this.document.match(/(\b[A-Z][a-zA-z.']*\b\s\b[A-Z][a-zA-Z-'.]*\b)/g)?.forEach(nameSet => { // Loop through all possible results of regex query
-				const strippedNames = nameSet.split(' ').map(name => name.toLowerCase()); // Our dataset is lowercase, so we need to make our convert our names.
+			// A regex query that looks for all proper nouns including possible name characters
+			const properNouns = this.document.match(/(\b[A-Z][a-zA-z.']*\b)/g);
+			for(let i = 0; i < properNouns.length - 1; i++) { // Go through every set of two proper nouns
+				const nameSet = [properNouns[i], properNouns[i+1]]; // Create an array with the current two nouns
+				const strippedNames = nameSet.map(name => name.toLowerCase()); // Our dataset is lowercase, so we need to make our convert our names.
 				if(this.names[0].includes(strippedNames[0]) && this.names[1].includes(strippedNames[1])) // If the dataset includes the first and last name, it's a name
-					resolve(nameSet);
-			});
+					resolve(nameSet.join(' '));
+			}
 			resolve(null); // If we didn't find a name in the string, return null
 		});
 	}
