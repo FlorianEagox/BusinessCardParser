@@ -1,4 +1,4 @@
-const serverURL = 'http://localhost:3000';
+const serverURL = 'http://localhost:5005	';
 const rdbMode = document.querySelector('#rdb-text');
 const txtText = document.querySelector('#txt-text');
 const fileImage = document.querySelector('#file-image');
@@ -6,6 +6,7 @@ const btnParse = document.querySelector('#btn-parse');
 const elErrorBox = document.querySelector('#error-box');
 const elError =	document.querySelector('#error');
 const loader = document.querySelector('#loader');
+
 
 btnParse.addEventListener('click', async () => {
 	let options; // options for the request
@@ -35,14 +36,19 @@ btnParse.addEventListener('click', async () => {
 		if(cardData.ok)
 			displayCard(await cardData.json());
 		else
-			displayError(cardData);
+			displayError(`${cardData.status}: ${await cardData.text()}`);
 	} catch(error) {
-		console.log(error)
+		displayError(error);
 	}
 });
 
+fileImage.addEventListener('change', e => {
+	const elFileName = document.querySelector('#lbl-filename');
+	if(e.target.files[0])
+		elFileName.textContent = e.target.files[0].name;
+});
+
 function displayCard(cardData) {
-	console.log(cardData);
 	const lblEmail = document.querySelector('#lbl-email');
 	const lblPhone = document.querySelector('#lbl-phone');
 	const lblName = document.querySelector('#lbl-name');
@@ -58,6 +64,6 @@ function displayError(error) {
 	console.error(error);
 	elError.textContent = error;
 	elErrorBox.classList.add('active');
-	setTimeout(() => elErrorBox.classList.remove('active'), 3000);
+	setTimeout(() => elErrorBox.classList.remove('active'), 5000);
 	loader.classList.remove('loader');
 }

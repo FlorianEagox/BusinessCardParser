@@ -2,15 +2,17 @@ import express from 'express'
 import cors from 'cors'
 import { recognize } from "node-tesseract-ocr"
 import multer from 'multer';
+import morgan from 'morgan';
 
 export default class Server {
 	constructor(cardParser) {
 		this.cardParser = cardParser;
-		this.port = 3000;
+		this.port = 5005;
 		
 		this.server = express();
-		this.server.use(express.json())
-		this.server.use(cors())
+		this.server.use(cors());
+		this.server.use(express.json());
+		this.server.use(morgan('tiny'));
 
 		// this.server.get('/', (req, res) => res.send('Welcome to buisness card parser! Try the routes /text & /image'));
 		this.server.use(express.static('client'));
@@ -37,6 +39,7 @@ export default class Server {
 				const data = cardParser.getContactInfo(resultOCR);
 				res.send(await data.toJSON());
 			} catch(error) {
+				console.error(error);
 				res.status(500).send(error.message)
 			}
 		});

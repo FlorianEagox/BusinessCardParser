@@ -1,17 +1,16 @@
 # Business Card Parser
 
+A fullstack app that provides an API & frontend for scraping data from business cards
+
 This was initially created for a code test in a job interview, but I've extended the functionality into its own project.
-
-This fullstack app takes the text from an OCR scanned business card and outputs user that can be saved as a contact.
-It find the name, email address, and phone number on the card.
-
-> This was written with Node v14 and uses some of the newer features of the runtime and may not work on older versions.
 
 ## How it works
 
 Each of these tasks employs regular expressions to detect the particular data.
 
 The function to find a phone number uses one to find the number, and another to transform it into the desired specification.
+
+If you provide an image, it will be scanned with Tesseract OCR and then the text will be processed.
 
 ### Detecting names
 
@@ -21,14 +20,41 @@ Because the program uses a datadet (around 260k names), the validation process c
 [Data set used](https://github.com/philipperemy/name-dataset)
 
 ## How to use
+
+### Single Use Mode
 To run the program from the command line, you can either run
 ```
-npm run start "<Business Card Text>"
+npm run start -s "<Business Card Text>"
 ```
 or
 ```
-node main.js "<Business Card Text>"
+node main.js -s "<Business Card Text>"
 ```
+
+### Server mode
+
+Running
+```
+npm run server
+```
+Will create a server with the API running and the client being served at `/`
+
+## API
+
+```
+POST /text
+```
+
+Provide the text of the card as a JSON object in the body like this:
+```
+{"text": "<Business Card Text>"}
+```
+
+```
+POST /image
+```
+You'll need to provide the image as a field with the name `image`
+The content-type must be `multipart/form-data`.
 
 ## Testing
 Unit tests are written with the Jest framework
@@ -48,3 +74,5 @@ The biggest improvement that could be made to this program is a broader better w
 The program could also probably load the name dataset files in a stream or asynchronously or at the same time to speed up performance.
 
 CardParser's constructor could be abstracted to parse the data in a different way (maybe by fetching it) so the code could be used both on a server and in a browser.
+
+I could also extend the scraping to include addresses but this would be more complicated.
