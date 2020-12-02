@@ -1,4 +1,4 @@
-const serverURL = 'http://localhost:5005	';
+const serverURL = 'https://sethpainter.com/businesscardparser';
 const rdbMode = document.querySelector('#rdb-text');
 const txtText = document.querySelector('#txt-text');
 const fileImage = document.querySelector('#file-image');
@@ -62,7 +62,7 @@ function displayCard(cardData) {
 }
 function displayError(error) {
 	console.error(error);
-	elError.textContent = error;
+	elError.innerHTML = error;
 	elErrorBox.classList.add('active');
 	setTimeout(() => elErrorBox.classList.remove('active'), 5000);
 	loader.classList.remove('loader');

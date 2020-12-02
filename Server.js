@@ -36,6 +36,7 @@ export default class Server {
 					oem: 1, // Use NNet LTSM mode
 					psm: 1, // Use sparce text / OCD
 				});
+				console.log(resultOCR);
 				const data = cardParser.getContactInfo(resultOCR);
 				res.send(await data.toJSON());
 			} catch(error) {
