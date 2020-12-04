@@ -1,5 +1,9 @@
 # Business Card Parser
 
+## Running live at
+
+https://sethpainter.com/businesscardparser
+
 A fullstack app that provides an API & frontend for scraping data from business cards
 
 This was initially created for a code test in a job interview, but I've extended the functionality into its own project.
@@ -10,7 +14,9 @@ Each of these tasks employs regular expressions to detect the particular data.
 
 The function to find a phone number uses one to find the number, and another to transform it into the desired specification.
 
-If you provide an image, it will be scanned with Tesseract OCR and then the text will be processed.
+If you provide an image, it will be scanned with Google CloudVision and then the text will be processed.
+
+The User will also have the option to save the card to local storage as well as send it to their email as a vCard (VCF file) to save to their contacts.
 
 ### Detecting names
 
@@ -28,14 +34,14 @@ npm run start -s "<Business Card Text>"
 ```
 or
 ```
-node main.js -s "<Business Card Text>"
+node app.js -s "<Business Card Text>"
 ```
 
 ### Server mode
 
 Running
 ```
-npm run server
+npm run app
 ```
 Will create a server with the API running and the client being served at `/`
 
@@ -76,3 +82,13 @@ The program could also probably load the name dataset files in a stream or async
 CardParser's constructor could be abstracted to parse the data in a different way (maybe by fetching it) so the code could be used both on a server and in a browser.
 
 I could also extend the scraping to include addresses but this would be more complicated.
+
+Users would be able to get their card as a contact by text instead of just email
+
+## Comming soon
+
+- A seperate mailer address and probably better security :/
+- PWA Support
+- Logo detection
+- ?URL Detection
+- ?Address Detection

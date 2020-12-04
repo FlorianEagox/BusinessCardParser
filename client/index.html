@@ -9,10 +9,7 @@
 </head>
 <body>
 	<div id="wrapper">
-		<section id="error-box">
-			An error occoured!
-			<p id="error"></p>
-		</section>
+		<section id="alert-box"></section>
 		<main class="rounded-panel">
 			<header>
 				<h1>Business Card<i class="far fa-address-card"></i>Parser</h1>
@@ -74,6 +71,7 @@
 					<a id="lbl-email" class="info-text"><slot name="email" /></a>
 				</p>
 			</section>
+			<button id="btn-send" class="hidden"><i class="far fa-paper-plane"></i></button>
 			<button id="btn-delete" class="hidden"><i class="fas fa-times"></i></button>
 		</div>
 	</template>

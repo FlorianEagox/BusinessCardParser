@@ -1,12 +1,11 @@
 import Card from "./Card.js";
 
-const serverURL = 'https://sethpainter.com/businesscardparser';
+export const serverURL = 'https://sethpainter.com/businesscardparser';
 const rdbMode = document.querySelector('#rdb-text');
 const txtText = document.querySelector('#txt-text');
 const fileImage = document.querySelector('#file-image');
-const elErrorBox = document.querySelector('#error-box');
-const elError =	document.querySelector('#error');
-const loader = document.querySelector('#loader');
+
+export const loader = document.querySelector('#loader');
 const currentCard = document.querySelector('#current-card');
 
 document.querySelector('#btn-parse').addEventListener('click', parseCard);
@@ -20,12 +19,12 @@ async function parseCard() {
 				body: JSON.stringify({text: txtText.value})
 			};
 		else {
-			displayError('You must enter the text to send');
+			displayAlert('You must enter the text to send');
 			return;
 		}
 	} else { // we're uploading an image
 		if(!fileImage.files[0]) {
-			displayError('You must upload an image!');
+			displayAlert('You must upload an image!');
 			return;
 		}
 		const form = new FormData();
@@ -38,9 +37,9 @@ async function parseCard() {
 		if(cardData.ok)
 			displayCard(await cardData.json());
 		else
-			displayError(`${cardData.status}: ${await cardData.text()}`);
+			displayAlert(`${cardData.status}: ${await cardData.text()}`);
 	} catch(error) {
-		displayError(error);
+		displayAlert(error);
 	}
 }
 fileImage.addEventListener('change', e => {
@@ -55,11 +54,19 @@ function displayCard(cardData) {
 	currentCard.update(cardData);
 	loader.classList.remove('loader');
 }
-function displayError(error) {
-	console.error(error);
-	elError.innerHTML = error;
-	elErrorBox.classList.add('active');
-	setTimeout(() => elErrorBox.classList.remove('active'), 5000);
+export function displayAlert(alert, error=true) {
+	const elAlertBox = document.querySelector('#alert-box');
+	if(error)
+		console.error(alert);
+	else
+		console.log(alert);
+	elAlertBox.innerHTML = alert;
+
+	elAlertBox.classList.toggle('error', error);
+	elAlertBox.classList.toggle('success', !error);
+
+	elAlertBox.classList.add('active');	
+	setTimeout(() => elAlertBox.classList.remove('active'), 5000);
 	loader.classList.remove('loader');
 }
 document.querySelector('#btn-save').addEventListener('click', () => currentCard.save());
@@ -80,7 +87,6 @@ export function displaySavedCards() {
 			cards.forEach(card => {
 				cardHolder.appendChild(new Card(card));
 			});
-			console.log('HI!')
 			cardHolder.parentElement.classList.remove('hidden');
 		}
 	} else {

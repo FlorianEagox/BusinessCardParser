@@ -14,7 +14,8 @@ export default class ContactInfo {
 				if(this.names[0].includes(strippedNames[0]) && this.names[1].includes(strippedNames[1])) // If the dataset includes the first and last name, it's a name
 					resolve(nameSet.join(' '));
 			}
-			resolve(null); // If we didn't find a name in the string, return null
+			const titleCaseLine = this.document.match(/^[A-Z][a-z]*(.[A-Z][a-z]*)*\n/m);
+			resolve(titleCaseLine || null); // If we didn't find a name in the string, return null
 		});
 	}
 	// Gets the phone number from the card text

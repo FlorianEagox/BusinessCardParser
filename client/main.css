@@ -169,8 +169,7 @@ a {
 	color: var(--primary-color);
 }
 
-#error-box {
-	background: var(--primary-color);
+#alert-box {
 	color: var(--accent-color);
 	/* Make the element invisible and take no space */
 	visibility: hidden;
@@ -180,13 +179,19 @@ a {
 	border-radius: 20px;
 	transition: 1s all;
 }
-#error-box.active {
+#alert-box.active {
 	transition: 1s all;
 	opacity: 1;
 	visibility: visible;
 	max-height: inherit;
 	padding: 1em;
 	margin: 1em 0;
+}
+.error {
+	background: var(--primary-color);
+}
+.success {
+	background: green;
 }
 
 .hidden {
@@ -196,7 +201,7 @@ a {
 #cards {
 	margin-top: 2em;
 }
-#btn-delete {
+#card button {
 	padding: 0.1em;
 	align-self: baseline;
 }

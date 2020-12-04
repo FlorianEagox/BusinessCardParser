@@ -4,9 +4,10 @@
 	"description": "A fullstack app that provides an API & frontend for scraping data from business cards",
 	"type": "module",
 	"scripts": {
-		"start": "node main.js",
+		"start": "node app.js",
 		"test": "node --experimental-vm-modules node_modules/jest/bin/jest.js",
-		"server": "nodemon main.js"
+		"dev": "nodemon app.js",
+		"server": "pm2 startup app.js"
 	},
 	"author": "Seth Painter",
 	"license": "ISC",
@@ -21,6 +22,8 @@
 		"dotenv": "^8.2.0",
 		"express": "^4.17.1",
 		"multer": "^1.4.2",
-		"node-tesseract-ocr": "^2.0.0"
+		"node-tesseract-ocr": "^2.0.0",
+		"nodemailer": "^6.4.16",
+		"vcards-js": "^2.10.0"
 	}
 }

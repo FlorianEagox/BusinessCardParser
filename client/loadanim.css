@@ -4,8 +4,8 @@
   background: #403232;
   -webkit-animation: load1 1s infinite ease-in-out;
   animation: load1 1s infinite ease-in-out;
-  width: 1em;
-  height: 4em;
+  width: 0.5em;
+  height: 2em;
 }
 .loader {
   color: #403232;
