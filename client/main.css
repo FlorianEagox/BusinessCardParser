@@ -152,10 +152,17 @@ button {
 #card .info {
 	display: flex;
 	flex-direction: column;
-	flex-grow: 1;
 	justify-content: space-between;
 	font-weight: bolder;
-
+}
+#card .info > * {
+	 overflow-wrap: break-word;
+	 word-wrap: break-word;
+	 word-break: break-all;
+	 hyphens: auto;
+}
+.info > * > :first-child {
+	margin-right: 0.2em;
 }
 .info-text > slot:empty {
 	background: var(--primary-color);
