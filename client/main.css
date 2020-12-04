@@ -1,3 +1,5 @@
+@import url("https://use.fontawesome.com/releases/v5.7.1/css/all.css");
+
 :root {
 	--primary-color: maroon;
 	--accent-color: white;
@@ -26,7 +28,7 @@ body {
 #wrapper {
 	max-width: 400px;
 }
-main {
+.rounded-panel {
 	display: flex;
 	flex-direction: column;
 	justify-content: space-between;
@@ -155,7 +157,7 @@ button {
 	font-weight: bolder;
 
 }
-.info-text:empty {
+.info-text > slot:empty {
 	background: var(--primary-color);
 	opacity: 0.8;
 	width: 10em;
@@ -187,6 +189,17 @@ a {
 	margin: 1em 0;
 }
 
+.hidden {
+	display: none;
+}
+
+#cards {
+	margin-top: 2em;
+}
+#btn-delete {
+	padding: 0.1em;
+	align-self: baseline;
+}
 @media(max-width: 450px) {
 	#wrapper, main {
 		width: 100%;

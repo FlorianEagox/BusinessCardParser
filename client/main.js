@@ -1,14 +1,16 @@
+import Card from "./Card.js";
+
 const serverURL = 'https://sethpainter.com/businesscardparser';
 const rdbMode = document.querySelector('#rdb-text');
 const txtText = document.querySelector('#txt-text');
 const fileImage = document.querySelector('#file-image');
-const btnParse = document.querySelector('#btn-parse');
 const elErrorBox = document.querySelector('#error-box');
 const elError =	document.querySelector('#error');
 const loader = document.querySelector('#loader');
+const currentCard = document.querySelector('#current-card');
 
-
-btnParse.addEventListener('click', async () => {
+document.querySelector('#btn-parse').addEventListener('click', parseCard);
+async function parseCard() {
 	let options; // options for the request
 	const textMode = rdbMode.checked; // tells us which tab is selected
 	if(textMode) { // We're uploading card text
@@ -40,8 +42,7 @@ btnParse.addEventListener('click', async () => {
 	} catch(error) {
 		displayError(error);
 	}
-});
-
+}
 fileImage.addEventListener('change', e => {
 	const elFileName = document.querySelector('#lbl-filename');
 	if(e.target.files[0])
@@ -49,15 +50,9 @@ fileImage.addEventListener('change', e => {
 });
 
 function displayCard(cardData) {
-	const lblEmail = document.querySelector('#lbl-email');
-	const lblPhone = document.querySelector('#lbl-phone');
-	const lblName = document.querySelector('#lbl-name');
-	const {name, phone, email} = cardData
-	lblName.textContent = name;
-	lblPhone.textContent = phone;
-	lblPhone.href = `tel:${phone}`;
-	lblEmail.textContent = email;
-	lblEmail.href = `mailto:${email}`;
+	if(!Object.values(cardData).every(o => o === null)) // If the object actually has some stuff
+		document.querySelector('#btn-save').classList.remove('hidden');
+	currentCard.update(cardData);
 	loader.classList.remove('loader');
 }
 function displayError(error) {
@@ -67,3 +62,29 @@ function displayError(error) {
 	setTimeout(() => elErrorBox.classList.remove('active'), 5000);
 	loader.classList.remove('loader');
 }
+document.querySelector('#btn-save').addEventListener('click', () => currentCard.save());
+
+function clearCards() {
+	localStorage.clear('key');
+	displaySavedCards();
+}
+document.querySelector('#btn-clear').addEventListener('click', clearCards);
+
+// Display the saved cards
+export function displaySavedCards() {
+	const cardHolder = document.querySelector('#card-holder');
+	cardHolder.innerHTML = '';
+	if(localStorage.getItem('cards')) {
+		const cards = JSON.parse(localStorage.getItem('cards'));
+		if(cards.length > 0) {
+			cards.forEach(card => {
+				cardHolder.appendChild(new Card(card));
+			});
+			console.log('HI!')
+			cardHolder.parentElement.classList.remove('hidden');
+		}
+	} else {
+		cardHolder.parentElement.classList.add('hidden');
+	}
+}
+displaySavedCards();

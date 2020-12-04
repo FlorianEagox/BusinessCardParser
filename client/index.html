@@ -6,7 +6,6 @@
 	<title>Buisness Card Parser</title>
 	<link rel="stylesheet" href="main.css">
 	<link rel="stylesheet" href="loadanim.css">
-	<script src="https://kit.fontawesome.com/c3db8f4cfe.js" crossorigin="anonymous"></script>
 </head>
 <body>
 	<div id="wrapper">
@@ -14,7 +13,7 @@
 			An error occoured!
 			<p id="error"></p>
 		</section>
-		<main>
+		<main class="rounded-panel">
 			<header>
 				<h1>Business Card<i class="far fa-address-card"></i>Parser</h1>
 			</header>
@@ -41,30 +40,43 @@
 				<button id="btn-parse">Parse Card</button>
 			</section>
 			<div id="loader"></div>
-			<section id="card">
-				<i id="avatar" class="fas fa-user-tie fa-3x"></i>
-				<section class="info" contenteditable="true"=>
-					<p>
-						<i class="fas fa-signature"></i>
-						<span class="info-text" id="lbl-name"></span>
-					</p>
-					<p>
-						<i class="fas fa-phone"></i>
-						<a id="lbl-phone" class="info-text"></a>
-					</p>
-					<p>
-						<i class="fas fa-envelope"></i>
-						<a id="lbl-email" class="info-text"></a>
-					</p>
-				</section>
-			</section>
+			<buisness-card id="current-card"></buisness-card>
+			<button id="btn-save" class="hidden">Save Card</button>
 			<footer>
 				Made by <a href="https://sethpainter.com">Seth Painter</a>
 				Source on <a href="https://github.com/TheFoxarmy/BusinessCardParser"><i class="fab fa-github"></i>Github</a>
 			</footer>
 		</main>
+		<section id="cards" class="rounded-panel">
+			<footer>Saved Cards</footer>
+			<div id="card-holder"></div>
+			<button id="btn-clear"><i class="fas fa"></i>Clear All</button>
+		</section>
 	</div>
 
-	<script src="main._js"></script>
+	<template id="card-template">
+		<style>
+			@import url( './main.css' );
+		</style>
+		<div id="card">
+			<i id="avatar" class="fas fa-user-tie fa-3x"></i>
+			<section class="info">
+				<p>
+					<i class="fas fa-signature"></i>
+					<span class="info-text" id="lbl-name"><slot name="name" /></span>
+				</p>
+				<p>
+					<i class="fas fa-phone"></i>
+					<a id="lbl-phone" class="info-text"><slot name="phone" /></a>
+				</p>
+				<p>
+					<i class="fas fa-envelope"></i>
+					<a id="lbl-email" class="info-text"><slot name="email" /></a>
+				</p>
+			</section>
+			<button id="btn-delete" class="hidden"><i class="fas fa-times"></i></button>
+		</div>
+	</template>
+	<script src="main.js" type="module"></script>
 </body>
 </html>
