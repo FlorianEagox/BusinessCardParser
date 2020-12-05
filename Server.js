@@ -84,7 +84,7 @@ export default class Server {
 			};
 			try {
 				const mail = await mailer.sendMail(mailOptions);
-				res.send('Sent!');
+				res.send(`Email sent to ${email}!`);
 			} catch(error) {
 				res.status(500).send(`Oof: ${JSON.stringify(error)}`);
 			}

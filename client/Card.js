@@ -1,25 +1,39 @@
-import { displaySavedCards, displayAlert, serverURL, loader } from './main.js'
+import { updateSavedCardsDisplay, displayAlert, serverURL, loader } from './main.js'
 
 export default class Card extends HTMLElement {
-	constructor(cardData=null) {
+	constructor(cardData=null) { // The first card, #currentCard is initialized without data which is added later
 		super();
-		const template = document.getElementById('card-template').content;
-		const root = this.attachShadow({mode: 'open'}).appendChild(template.cloneNode(true));
+		const template = document.querySelector('#card-template').content;
+		this.attachShadow({mode: 'open'}).appendChild(template.cloneNode(true)); // Set the shadow root to the template
+		// Get reference to all the slots defined in the template
 		this.lblName = this.shadowRoot.querySelector('[name=name]');
 		this.lblPhone = this.shadowRoot.querySelector('[name=phone]');
 		this.lblEmail = this.shadowRoot.querySelector('[name=email]');
-		if(cardData) {
+
+		this.btnSave = this.shadowRoot.querySelector('#btn-save');
+		this.btnSave.addEventListener('click', () => this.save());
+
+		this.btnSend = this.shadowRoot.querySelector('#btn-send');
+		this.btnSend.addEventListener('click', () => this.send());
+
+		if(cardData) { // These are the cards in the saved cards display
 			this.cardData = cardData;
-			// We only want the delete button when the card is created manually
+			// currentCard doesn't get a delete button
 			const btnDelete = this.shadowRoot.querySelector('#btn-delete');
 			btnDelete.addEventListener('click', () => this.delete());
 			btnDelete.classList.remove('hidden');
 			this.update();
 		}
 	}
-	update(cardData=null) {
-		if(cardData)
+	getSavedCards() {
+		return JSON.parse(localStorage.getItem('cards')) || [];
+	}
+	update(cardData=null) { // Update the card's labels w/ its data and show buttons.
+		if(cardData) { // The saved cards aren't updated w/ data. For the #current-card
 			this.cardData = cardData;
+			this.btnSave.classList.remove('hidden'); // #current-card has a save btn
+		}
+		// update the template slots w/ the text & links
 		const {name, phone, email} = this.cardData;
 		this.lblName.textContent = name;
 		this.lblPhone.textContent = phone;
@@ -27,18 +41,19 @@ export default class Card extends HTMLElement {
 		this.lblEmail.textContent = email;
 		this.lblEmail.parentElement.href = `mailto:${email}`;
 
-		const btnSend = this.shadowRoot.querySelector('#btn-send');
-		btnSend.addEventListener('click', () => this.send());
-		btnSend.classList.remove('hidden');
-
+		// both types of buttons have a send btn
+		this.btnSend.classList.remove('hidden');
 	}
-	save() {
-		const cards = JSON.parse(localStorage.getItem('cards')) || [];
-		cards.push(this.cardData);
-		localStorage.setItem('cards', JSON.stringify(cards));
-		displaySavedCards();
+	save() { // TODO: Not this
+		// put current card in as string so it will get rejected if duplicate
+		let cards = new Set(this.getSavedCards().map(card => JSON.stringify(card)));
+		 // put current card in as string so it will get rejected if duplicate
+		cards.add(JSON.stringify(this.cardData));
+		// convert the string cards to objects and then the whole array to set
+		localStorage.setItem('cards', JSON.stringify(Array.from(cards).map(card => JSON.parse(card))));
+		updateSavedCardsDisplay();
 	}
-	async send() {
+	async send() { // Request the API to email me to an email address the user provides
 		const email = prompt('Email to send contact');
 		if(email) {
 			try {
@@ -48,21 +63,27 @@ export default class Card extends HTMLElement {
 					headers: {'content-type': 'application/json'},
 					body: JSON.stringify({email, card: this.cardData})
 				});
+				const response = await emailRequest.text();
 				if(emailRequest.ok)
-					displayAlert(`Email sent to\n${email}`, false);
+					displayAlert(response, false);
 				else
-					displayAlert(`${emailRequest.status}: ${await emailRequest.text()}`);
+					displayAlert(`${emailRequest.status}: ${response}`);
 			} catch(error) {
 				displayAlert(error);
 			}
 		}
 	}
 	delete() {
-		const cards = JSON.parse(localStorage.getItem('cards')) || [];
-		localStorage.setItem('cards', JSON.stringify(cards.filter(
-			card => JSON.stringify(card) == JSON.stringify(this.cardData)
-		)));
-		displaySavedCards();
+		const cards = this.getSavedCards().filter(card => { // Go through every card to to find one that has the same values as me
+			return !Object.values(card).every(val => { // Check every value of me and the current card
+				return Object.values(this.cardData).includes(val) // check if the current value is in both cards.
+			})
+		});
+		if(cards.length) // If we deleted the last card, delete the whole key, otherwise just update it
+			localStorage.setItem('cards', JSON.stringify(cards));
+		else
+			localStorage.removeItem('cards');
+		updateSavedCardsDisplay();
 	}
 }
 customElements.define('buisness-card', Card);

@@ -1,5 +1,5 @@
 # Business Card Parser
-
+![Project Status: MVP](https://img.shields.io/badge/Project%20Status-MVP-green)
 ## Running live at
 
 https://sethpainter.com/businesscardparser
