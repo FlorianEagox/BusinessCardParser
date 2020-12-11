@@ -1,0 +1,15 @@
+{
+	"name": "Business Card Parser",
+	"short_name": "BusinessCardParser",
+	"display": "fullscreen",
+	"start_url": ".",
+	"background_color": "#111",
+	"theme_color": "#800000",
+	"icons": [
+		{
+		  "src": "icon.png",
+		  "sizes": "144x144",
+		  "type": "image/png"
+		}
+	]
+}

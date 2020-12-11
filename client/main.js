@@ -47,8 +47,14 @@ async function parseCard() {
 // When an image is added, show the filename to indicate
 fileImage.addEventListener('change', e => {
 	const elFileName = document.querySelector('#lbl-filename');
-	if(e.target.files[0])
+	if(e.target.files[0]) {
 		elFileName.textContent = e.target.files[0].name;
+		const reader = new FileReader();
+		reader.onloadend = function () {
+		   e.target.nextElementSibling.style.backgroundImage = `url(${reader.result})`;
+		}
+		reader.readAsDataURL(e.target.files[0]);
+	}
 });
 
 // Update current card, giving it data and adding buttons
@@ -77,7 +83,7 @@ export function displayAlert(alert, error=true) {
 
 // Remove all saved cards
 document.querySelector('#btn-clear').addEventListener('click', () => {
-	localStorage.removeItem('key');
+	localStorage.removeItem('cards');
 	updateSavedCardsDisplay();
 });
 
@@ -93,3 +99,16 @@ export function updateSavedCardsDisplay() {
 		cardHolder.parentElement.classList.add('hidden');
 }
 updateSavedCardsDisplay();
+
+// PWA Stuff
+navigator?.serviceWorker.register('sw.js');
+
+// rainbow easer egg
+document.querySelector('.egg').addEventListener('dblclick', () => {
+	const root = document.querySelector(':root')
+	let hue = 0;
+	setInterval(() => {
+		root.style.setProperty('--primary-color', `hsl(${hue}, 100%, 50%)`), 100
+		hue++;
+	}, 20);
+});
